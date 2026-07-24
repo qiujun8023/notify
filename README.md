@@ -83,13 +83,15 @@ Content-Type: application/json
 
 | 字段 | 类型 | 必填 | 说明 |
 |------|------|------|------|
-| channel | string | 是 | 通道类型：`feishu` / `telegram` |
+| channel | string | 是 | 通道类型：`feishu` / `telegram`，大小写不敏感，例如 `Feishu`、`Telegram`。不接受 `Lark`。 |
 | target | string | 是 | 接收目标。飞书为 `chat_id`；Telegram 为 `chat_id` 或 `chat_id:thread_id`（支持 Topic）。 |
 | params.title | string | 否 | 消息标题 |
 | params.color | string | 否 | 标题颜色：Blue/Green/Orange/Grey/Red/Purple (Telegram 消息忽略此字段) |
-| params.content | string | 否 | 消息内容（飞书支持 Markdown；Telegram 支持 HTML） |
+| params.content | string | 否 | 消息内容（飞书支持 Markdown；Telegram 按纯文本转义） |
 | params.note | string | 否 | 备注 |
 | params.url | string | 否 | 跳转链接 |
+
+接口返回成功仅表示请求已交给异步发送队列，不表示下游平台已经完成投递；最终结果以服务日志为准。
 
 ### 发送原始消息
 
@@ -121,7 +123,7 @@ Content-Type: application/json
 
 **Query 参数**
 
-- `channel`: `feishu` 或 `telegram`
+- `channel`: `feishu` 或 `telegram`，大小写不敏感；不接受 `lark`
 - `target`: 接收目标 ID
 
 接口只接受 Grafana 13 统一告警 Webhook。每个 firing 告警实例必须提供完整的 `summary` annotation，
@@ -136,7 +138,7 @@ Content-Type: application/json
 
 ```json
 {
-  "receiver": "Lark - 监控 - 程序",
+  "receiver": "Feishu - 监控 - 程序",
   "status": "firing",
   "commonLabels": {
     "alertname": "CPU 使用率过高"
@@ -182,7 +184,7 @@ GET /api/chats?channel=feishu
 | APP_TELEGRAM_BOT_TOKEN | Telegram Bot Token | - |
 | APP_LOG_LEVEL | 日志级别：debug/info/warn/error | info |
 | QUEUE_RATE_LIMIT | 发送速率限制 (个/秒) | 1.0 |
-| QUEUE_MAX_ATTEMPTS | 最大重试次数 | 3 |
+| QUEUE_MAX_ATTEMPTS | 单条消息最多发送次数（包含首次发送） | 3 |
 | QUEUE_RETRY_DELAY | 重试基础延迟（指数退避） | 1s |
 | QUEUE_BUFFER_SIZE | 每个目标的队列缓冲大小 | 1000 |
 | QUEUE_IDLE_TIMEOUT | 队列空闲多久后自动释放 | 5m |
@@ -195,9 +197,9 @@ GET /api/chats?channel=feishu
   - 默认限频速率为 **1条/秒**（可通过 `QUEUE_RATE_LIMIT` 配置）。
   - 例如：同时向飞书群 A 和群 B 发送消息，它们互不影响，各自都能达到 1条/秒的速率。但如果短时间内向群 A 发送大量消息，这些消息会排队并按 1条/秒的速度依次发出。
 - **自动重试**：如果发送失败（例如网络波动或 API 临时错误），系统会自动重试。
-  - 默认重试 **3次**（`QUEUE_MAX_ATTEMPTS`）。
-  - 采用**指数退避**策略，第 1 次重试延迟 1s，第 2 次 2s，第 3 次 4s（`QUEUE_RETRY_DELAY` 配置基础延迟）。
-  - 超过重试次数仍失败的任务将被丢弃，并记录错误日志。
+  - 默认最多发送 **3 次**，即首次发送失败后最多重试 2 次（`QUEUE_MAX_ATTEMPTS`）。
+  - 采用**指数退避**策略，默认第 1 次重试延迟 1s，第 2 次重试延迟 2s（`QUEUE_RETRY_DELAY` 配置基础延迟）。
+  - 达到最大发送次数后仍失败的任务将被丢弃，并记录错误日志。
 
 ## 常见问题 (FAQ)
 

@@ -2,6 +2,7 @@ package service
 
 import (
 	"fmt"
+	"strings"
 
 	"notify/internal/config"
 )
@@ -35,10 +36,11 @@ func GetService(channel Channel) (NotifyService, error) {
 }
 
 func ValidateChannel(s string) (Channel, error) {
-	channel := Channel(s)
-	switch channel {
-	case ChannelFeishu, ChannelTelegram:
-		return channel, nil
+	switch strings.ToLower(s) {
+	case string(ChannelFeishu):
+		return ChannelFeishu, nil
+	case string(ChannelTelegram):
+		return ChannelTelegram, nil
 	default:
 		return "", fmt.Errorf("invalid channel: %s", s)
 	}

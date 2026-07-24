@@ -7,7 +7,7 @@ import (
 
 func TestDecodeGrafanaAlertFiring(t *testing.T) {
 	body := []byte(`{
-		"receiver":"Lark - Test",
+		"receiver":"Feishu - Test",
 		"status":"firing",
 		"groupLabels":{"alertname":"Position mismatch"},
 		"commonLabels":{"alertname":"Position mismatch","grafana_folder":"Arbitrage"},
@@ -56,7 +56,7 @@ func TestDecodeGrafanaAlertFiring(t *testing.T) {
 
 func TestDecodeGrafanaAlertResolved(t *testing.T) {
 	body := []byte(`{
-		"receiver":"Lark - Test",
+		"receiver":"Feishu - Test",
 		"status":"resolved",
 		"commonLabels":{"alertname":"Runner error log count"},
 		"commonAnnotations":{"notificationType":"alert"},
@@ -79,7 +79,7 @@ func TestDecodeGrafanaAlertResolved(t *testing.T) {
 
 func TestDecodeGrafanaReportType(t *testing.T) {
 	body := []byte(`{
-		"receiver":"Lark - Operations",
+		"receiver":"Feishu - Operations",
 		"status":"firing",
 		"commonLabels":{"alertname":"昨日新上线策略表现"},
 		"commonAnnotations":{"notificationType":"report"},
@@ -108,7 +108,7 @@ func TestDecodeGrafanaReportType(t *testing.T) {
 
 func TestDecodeGrafanaAlertRequiresCommonMetadata(t *testing.T) {
 	body := []byte(`{
-		"receiver":"Lark - Test",
+		"receiver":"Feishu - Test",
 		"status":"firing",
 		"title":"Position mismatch",
 		"groupLabels":{"alertname":"Position mismatch"},
@@ -127,7 +127,7 @@ func TestDecodeGrafanaAlertRequiresCommonMetadata(t *testing.T) {
 
 func TestDecodeGrafanaAlertSortsMatches(t *testing.T) {
 	body := []byte(`{
-		"receiver":"Lark - Test",
+		"receiver":"Feishu - Test",
 		"status":"firing",
 		"commonLabels":{"alertname":"Position mismatch"},
 		"commonAnnotations":{"notificationType":"alert","notificationSortOrder":"desc","notificationSortAbsolute":"true"},
@@ -167,7 +167,7 @@ func TestDecodeGrafanaAlertSortsMatches(t *testing.T) {
 
 func TestDecodeGrafanaAlertSortsTextAscending(t *testing.T) {
 	body := []byte(`{
-		"receiver":"Lark - Test",
+		"receiver":"Feishu - Test",
 		"status":"firing",
 		"commonLabels":{"alertname":"New symbol"},
 		"commonAnnotations":{"notificationType":"alert","notificationSortOrder":"asc"},
@@ -188,7 +188,7 @@ func TestDecodeGrafanaAlertSortsTextAscending(t *testing.T) {
 
 func TestDecodeGrafanaAlertSummary(t *testing.T) {
 	body := []byte(`{
-		"receiver":"Lark - Test",
+		"receiver":"Feishu - Test",
 		"status":"firing",
 		"commonLabels":{"alertname":"现货与合约头寸差异过大"},
 		"commonAnnotations":{"notificationType":"alert"},
@@ -228,7 +228,7 @@ func TestDecodeGrafanaAlertSummary(t *testing.T) {
 
 func TestDecodeGrafanaAlertRequiresSummary(t *testing.T) {
 	body := []byte(`{
-		"receiver":"Lark - Test",
+		"receiver":"Feishu - Test",
 		"status":"firing",
 		"commonLabels":{"alertname":"现货与合约头寸差异过大"},
 		"commonAnnotations":{"notificationType":"alert"},
@@ -247,7 +247,7 @@ func TestDecodeGrafanaAlertRequiresSummary(t *testing.T) {
 
 func TestDecodeGrafanaAlertDoesNotInferSummary(t *testing.T) {
 	body := []byte(`{
-		"receiver":"Lark - Test",
+		"receiver":"Feishu - Test",
 		"status":"firing",
 		"commonLabels":{"alertname":"Runner error log count"},
 		"commonAnnotations":{"notificationType":"alert"},
@@ -266,7 +266,7 @@ func TestDecodeGrafanaAlertDoesNotInferSummary(t *testing.T) {
 
 func TestDecodeGrafanaAlertDatasourceError(t *testing.T) {
 	body := []byte(`{
-		"receiver":"Lark - Test",
+		"receiver":"Feishu - Test",
 		"status":"firing",
 		"commonLabels":{"alertname":"DatasourceError","datasource_uid":"al4sYqNVz"},
 		"alerts":[{
@@ -291,7 +291,7 @@ func TestDecodeGrafanaAlertDatasourceError(t *testing.T) {
 
 func TestDecodeGrafanaAlertRejectsMissingSummary(t *testing.T) {
 	body := []byte(`{
-		"receiver":"Lark - Test",
+		"receiver":"Feishu - Test",
 		"status":"firing",
 		"commonLabels":{"alertname":"Query warning"},
 		"commonAnnotations":{"notificationType":"alert"},
