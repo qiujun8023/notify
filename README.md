@@ -48,14 +48,14 @@ source .env
 
 ### Docker
 
-镜像由 CI 自动构建并推送到 Docker Hub：
+镜像由 CI 自动构建并推送到 GitHub Container Registry：
 
 ```bash
 docker run -p 8000:8000 \
   -e APP_FEISHU_ID=your_app_id \
   -e APP_FEISHU_SECRET=your_app_secret \
   -e APP_TELEGRAM_BOT_TOKEN=your_bot_token \
-  your_username/notify:latest
+  ghcr.io/qiujun8023/notify:latest
 ```
 
 ## API 接口
