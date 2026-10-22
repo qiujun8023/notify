@@ -1,8 +1,8 @@
 module notify
 
-go 1.25.5
+go 1.27.3
 
 require (
-	github.com/lmittmann/tint v1.1.2 // indirect
-	golang.org/x/time v0.14.0 // indirect
+	github.com/lmittmann/tint v1.2.1
+	golang.org/x/time v0.16.0
 )
