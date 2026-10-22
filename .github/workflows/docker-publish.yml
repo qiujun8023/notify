@@ -1,17 +1,20 @@
-name: Docker Build CI
+name: Docker Publish
 
 on:
-  push:
-    branches:
-      - master
+  workflow_run:
+    workflows: [CI]
+    types: [completed]
+    branches: [master]
   workflow_dispatch:
 
 concurrency:
-  group: ${{ github.workflow }}-${{ github.ref }}
+  group: ${{ github.workflow }}
   cancel-in-progress: true
 
 jobs:
   build:
+    # CI 通过的 push 才发布；手动触发直接发布
+    if: github.event_name == 'workflow_dispatch' || (github.event.workflow_run.conclusion == 'success' && github.event.workflow_run.event == 'push')
     runs-on: ubuntu-latest
     permissions:
       contents: read
@@ -19,14 +22,13 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v7
+        with:
+          ref: ${{ github.event.workflow_run.head_sha || github.sha }}
 
       - name: Set up Go
         uses: actions/setup-go@v7
         with:
           go-version-file: go.mod
-
-      - name: Test
-        run: go test ./...
 
       - name: Build binaries
         run: |
